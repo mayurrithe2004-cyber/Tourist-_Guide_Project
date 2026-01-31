@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Guide - API Test Console</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        h1 { color: #61dafb; margin-bottom: 20px; text-align: center; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .panel { background: #2d2d2d; padding: 15px; border-radius: 6px; border: 1px solid #444; }
+        .panel h3 { color: #61dafb; margin-bottom: 10px; font-size: 14px; }
+        input, textarea, button { 
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: 1px solid #444;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        button {
+            background: #61dafb;
+            color: #1e1e1e;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            padding: 10px;
+        }
+        button:hover { background: #4db8e8; }
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+            font-size: 11px;
+        }
+        .endpoint-item {
+            background: #1e1e1e;
+            padding: 10px;
+            margin: 8px 0;
+            border-left: 3px solid #61dafb;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .endpoint-item:hover {
+            background: #252525;
+            border-left-color: #4db8e8;
+        }
+        .endpoint-item.GET { border-left-color: #61affe; }
+        .endpoint-item.POST { border-left-color: #49cc90; }
+        .endpoint-item.PUT { border-left-color: #fca130; }
+        .endpoint-item.DELETE { border-left-color: #f93e3e; }
+        .method-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            margin-right: 8px;
+        }
+        .GET { background: #61affe; }
+        .POST { background: #49cc90; }
+        .PUT { background: #fca130; }
+        .DELETE { background: #f93e3e; }
+        .endpoint-path { color: #d4d4d4; word-break: break-all; margin-top: 5px; }
+        .success { color: #49cc90; }
+        .error { color: #f93e3e; }
+        .info { color: #61dafb; }
+        small { opacity: 0.7; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Tourist Guide API Test Console</h1>
+        
+        <div class="grid">
+            <!-- Left Panel: Endpoints -->
+            <div class="panel">
+                <h3>📋 API Endpoints</h3>
+                
+                <div class="endpoint-item GET">
+                    <span class="method-badge GET">GET</span> Get All Destinations
+                    <div class="endpoint-path">backend/api/destinations.php?action=list</div>
+                </div>
+                
+                <div class="endpoint-item POST">
+                    <span class="method-badge POST">POST</span> User Login
+                    <div class="endpoint-path">backend/api/auth.php?action=login</div>
+                    <small>Email: user@demo.com | Password: pass123</small>
+                </div>
+                
+                <div class="endpoint-item POST">
+                    <span class="method-badge POST">POST</span> Admin Login
+                    <div class="endpoint-path">backend/api/auth.php?action=admin-login</div>
+                    <small>Email: admin@admin.com | Password: admin123</small>
+                </div>
+                
+                <div class="endpoint-item POST">
+                    <span class="method-badge POST">POST</span> Register User
+                    <div class="endpoint-path">backend/api/auth.php?action=register</div>
+                </div>
+                
+                <div class="endpoint-item GET">
+                    <span class="method-badge GET">GET</span> Get User Bookings
+                    <div class="endpoint-path">backend/api/bookings.php?action=user&user_id=1</div>
+                </div>
+                
+                <div class="endpoint-item POST">
+                    <span class="method-badge POST">POST</span> Create Booking
+                    <div class="endpoint-path">backend/api/bookings.php</div>
+                </div>
+                
+                <div class="endpoint-item GET">
+                    <span class="method-badge GET">GET</span> Get Wishlist
+                    <div class="endpoint-path">backend/api/wishlist.php?user_id=1</div>
+                </div>
+                
+                <div class="endpoint-item POST">
+                    <span class="method-badge POST">POST</span> Add to Wishlist
+                    <div class="endpoint-path">backend/api/wishlist.php</div>
+                </div>
+            </div>
+            
+            <!-- Right Panel: Request/Response -->
+            <div class="panel">
+                <h3>🔧 Request & Response</h3>
+                
+                <label>Endpoint:</label>
+                <input type="text" id="endpoint" placeholder="e.g., backend/api/destinations.php?action=list" value="backend/api/destinations.php?action=list">
+                
+                <label>Method:</label>
+                <select id="method" style="width: 100%; padding: 8px; background: #1e1e1e; color: #d4d4d4; border: 1px solid #444; border-radius: 4px;">
+                    <option>GET</option>
+                    <option>POST</option>
+                    <option>PUT</option>
+                    <option>DELETE</option>
+                </select>
+                
+                <label>Request Body (JSON):</label>
+                <textarea id="requestBody" placeholder='{"email":"user@demo.com","password":"pass123"}'>{"action":"list"}</textarea>
+                
+                <button onclick="sendRequest()">🚀 Send Request</button>
+                
+                <label style="margin-top: 15px;">Response:</label>
+                <textarea id="response" readonly placeholder="Response will appear here..."></textarea>
+                
+                <button onclick="clearAll()" style="background: #f93e3e;">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Predefined endpoints
+        const endpoints = {
+            'Get All Destinations': {
+                endpoint: 'backend/api/destinations.php?action=list',
+                method: 'GET',
+                body: {}
+            },
+            'Get Single Destination': {
+                endpoint: 'backend/api/destinations.php?action=get&id=1',
+                method: 'GET',
+                body: {}
+            },
+            'User Login': {
+                endpoint: 'backend/api/auth.php?action=login',
+                method: 'POST',
+                body: { email: 'user@demo.com', password: 'pass123' }
+            },
+            'Admin Login': {
+                endpoint: 'backend/api/auth.php?action=admin-login',
+                method: 'POST',
+                body: { email: 'admin@admin.com', password: 'admin123' }
+            },
+            'Register User': {
+                endpoint: 'backend/api/auth.php?action=register',
+                method: 'POST',
+                body: { name: 'Test User', email: 'test@example.com', password: 'password123', mobile: '9876543210' }
+            },
+            'Get User Bookings': {
+                endpoint: 'backend/api/bookings.php?action=user&user_id=1',
+                method: 'GET',
+                body: {}
+            },
+            'Create Booking': {
+                endpoint: 'backend/api/bookings.php',
+                method: 'POST',
+                body: { user_id: 1, destination_id: 1, check_in: '2026-02-01', check_out: '2026-02-05', travelers: 2, total_price: 36000 }
+            },
+            'Get All Bookings': {
+                endpoint: 'backend/api/bookings.php?action=all',
+                method: 'GET',
+                body: {}
+            },
+            'Get Wishlist': {
+                endpoint: 'backend/api/wishlist.php?user_id=1',
+                method: 'GET',
+                body: {}
+            },
+            'Add to Wishlist': {
+                endpoint: 'backend/api/wishlist.php',
+                method: 'POST',
+                body: { user_id: 1, destination_id: 1 }
+            }
+        };
+
+        // Add click listeners to endpoints
+        document.querySelectorAll('.endpoint-item').forEach((el, idx) => {
+            el.onclick = () => {
+                const keys = Object.keys(endpoints);
+                const key = keys[idx];
+                if (endpoints[key]) {
+                    const ep = endpoints[key];
+                    document.getElementById('endpoint').value = ep.endpoint;
+                    document.getElementById('method').value = ep.method;
+                    document.getElementById('requestBody').value = JSON.stringify(ep.body, null, 2);
+                }
+            };
+        });
+
+        async function sendRequest() {
+            const endpoint = document.getElementById('endpoint').value;
+            const method = document.getElementById('method').value;
+            const body = document.getElementById('requestBody').value;
+            const responseEl = document.getElementById('response');
+
+            if (!endpoint) {
+                responseEl.value = '❌ Error: Please enter an endpoint';
+                return;
+            }
+
+            try {
+                responseEl.value = '⏳ Loading...';
+
+                const options = {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+
+                if (method !== 'GET' && body) {
+                    options.body = body;
+                }
+
+                const response = await fetch(endpoint, options);
+                const data = await response.json();
+
+                responseEl.value = JSON.stringify(data, null, 2);
+                
+                // Color code response
+                if (data.status === 'success') {
+                    responseEl.style.color = '#49cc90';
+                } else {
+                    responseEl.style.color = '#f93e3e';
+                }
+            } catch (error) {
+                responseEl.value = '❌ Error: ' + error.message;
+                responseEl.style.color = '#f93e3e';
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('endpoint').value = '';
+            document.getElementById('method').value = 'GET';
+            document.getElementById('requestBody').value = '';
+            document.getElementById('response').value = '';
+            document.getElementById('response').style.color = '#d4d4d4';
+        }
+
+        // Auto-send on Enter
+        document.getElementById('endpoint').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendRequest();
+        });
+    </script>
+</body>
+</html>
